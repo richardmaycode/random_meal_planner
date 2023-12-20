@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_18_163648) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_18_190209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_163648) do
     t.index ["recipe_id"], name: "index_meals_recipes_on_recipe_id"
   end
 
+  create_table "plans", force: :cascade do |t|
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "recipes", force: :cascade do |t|
     t.string "name", limit: 75
     t.bigint "source_id", null: false
@@ -37,6 +43,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_163648) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_recipes_on_name", unique: true
     t.index ["source_id"], name: "index_recipes_on_source_id"
+  end
+
+  create_table "segments", force: :cascade do |t|
+    t.integer "index"
+    t.bigint "plan_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_id"], name: "index_segments_on_plan_id"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -50,4 +64,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_163648) do
   add_foreign_key "meals_recipes", "meals"
   add_foreign_key "meals_recipes", "recipes"
   add_foreign_key "recipes", "sources"
+  add_foreign_key "segments", "plans"
 end

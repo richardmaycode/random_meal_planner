@@ -30,7 +30,11 @@ DINNER_RECIPES.each do |recipe|
   Recipe.create! name: recipe, source_id: source.id
 end
 
+Recipe.create! name: "Brisket Breakfast Taco", source_id: 2
+
+Recipe.last.meals << Meal.first
+
 meal = Meal.find(3)
-Recipe.all.each do |recipe|
+Recipe.where(source_id: 1).each do |recipe|
   recipe.meals << meal
 end

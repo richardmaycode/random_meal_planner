@@ -1,0 +1,16 @@
+<%= form_with url: "/generator", method: :post do |form| %>
+  <%= tag.div do %>
+    <%= form.label :source_id, "Sources" %>
+    <%= form.collection_check_boxes :source_ids, Source.all, :id, :username do |source| %>
+      <%= tag.div class: "flex items-center gap-4" do %>
+        <%= source.check_box class: "", checked: true %>
+        <%= source.label class: ""%>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= tag.div do %>
+    <%= form.label :gen_amount, "Number of Days to Plan" %>
+    <%= form.number_field :gen_amount, value: 1, in: 1..30 %>
+  <% end %>
+  <%= form.submit "Generate" %>
+<% end %>
