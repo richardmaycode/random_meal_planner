@@ -11,8 +11,8 @@
 MEALS = %w[breakfast lunch dinner dessert snack].freeze
 SOURCES = %w[makayla_thomas_fit jasonalexander.fit].freeze
 
-DINNER_RECIPES = ['parmesan crusted chicken', 'creamy marinara
-chicken bowl', 'rasta pasta bowls', 'lemon shrimp
+DINNER_RECIPES = ["parmesan crusted chicken", 'creamy marinara
+chicken bowl', "rasta pasta bowls", 'lemon shrimp
 alfredo bowls', 'million dollar
 spaghetti bowl', '5 cheese chicken
 penne bowls', 'philly cheesesteak
@@ -32,7 +32,7 @@ DINNER_RECIPES.each do |recipe|
   Recipe.create! name: recipe, source_id: source.id
 end
 
-Recipe.create! name: 'Brisket Breakfast Taco', source_id: 2
+Recipe.create! name: "Brisket Breakfast Taco", source_id: 2
 
 Recipe.last.meals << Meal.first
 

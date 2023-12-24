@@ -3,8 +3,6 @@ class Generator
     return_recipes = []
     all_recipes = Recipe.where(source_id: sources)
 
-    
-
     number_of_days.to_i.times do
       return_recipes << all_recipes.sample.name
     end
