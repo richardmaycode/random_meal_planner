@@ -1,0 +1,29 @@
+<%= form_with model: instance do |f| %>
+  <%= tag.div do %>
+    <%= f.label :creator_ids, "Creators to include" %>
+    <%= f.collection_check_boxes :creator_ids, Creator.order(:username), :id, :username %>
+  <% end %>
+  <%= f.fields_for :sections do |ff| %>
+    <%= tag.div do %>
+      <%= tag.field_set class: "p-4 rounded border border-slate-200 flex flex-col w-1/2 mx-auto my-2" do %>
+        <%= tag.div do %>
+          <%= ff.label :skip %>
+          <%= ff.check_box :skip %>
+        <% end %>
+        <%= tag.div class: "flex gap-4" do %>
+          <%= tag.div ff.label :meal_ids, "Meals" %>
+          <%= ff.collection_check_boxes :meal_ids, Meal.all, :id, :name do |cb| %>
+            <%= tag.div class: "flex flex-col justify-center items-center" do %>
+              <%= tag.div cb.check_box %>
+              <%= tag.div cb.label %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= tag.div do %>
+    <%= link_to "Cancel", root_path %>
+    <%= f.submit "Generate" %>
+  <% end %>
+<% end %>

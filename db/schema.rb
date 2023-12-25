@@ -10,9 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_18_190209) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_25_002226) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "creators", force: :cascade do |t|
+    t.string "username", limit: 75
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["username"], name: "index_creators_on_username", unique: true
+  end
+
+  create_table "creators_instances", force: :cascade do |t|
+    t.bigint "creator_id", null: false
+    t.bigint "instance_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_creators_instances_on_creator_id"
+    t.index ["instance_id"], name: "index_creators_instances_on_instance_id"
+  end
+
+  create_table "instances", force: :cascade do |t|
+    t.integer "number_of_segments", default: 1
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "meals", force: :cascade do |t|
     t.string "name", limit: 20
@@ -30,6 +53,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_190209) do
     t.index ["recipe_id"], name: "index_meals_recipes_on_recipe_id"
   end
 
+  create_table "meals_sections", force: :cascade do |t|
+    t.bigint "meal_id", null: false
+    t.bigint "section_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["meal_id"], name: "index_meals_sections_on_meal_id"
+    t.index ["section_id"], name: "index_meals_sections_on_section_id"
+  end
+
   create_table "plans", force: :cascade do |t|
     t.string "slug"
     t.datetime "created_at", null: false
@@ -38,11 +70,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_190209) do
 
   create_table "recipes", force: :cascade do |t|
     t.string "name", limit: 75
-    t.bigint "source_id", null: false
+    t.bigint "creator_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_recipes_on_creator_id"
     t.index ["name"], name: "index_recipes_on_name", unique: true
-    t.index ["source_id"], name: "index_recipes_on_source_id"
+  end
+
+  create_table "sections", force: :cascade do |t|
+    t.boolean "skip", default: false
+    t.bigint "instance_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instance_id"], name: "index_sections_on_instance_id"
   end
 
   create_table "segments", force: :cascade do |t|
@@ -54,15 +94,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_190209) do
   end
 
   create_table "sources", force: :cascade do |t|
-    t.string "username", limit: 75
-    t.string "url"
+    t.string "name", limit: 75
+    t.bigint "creator_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["username"], name: "index_sources_on_username", unique: true
+    t.index ["creator_id"], name: "index_sources_on_creator_id"
   end
 
+  add_foreign_key "creators_instances", "creators"
+  add_foreign_key "creators_instances", "instances"
   add_foreign_key "meals_recipes", "meals"
   add_foreign_key "meals_recipes", "recipes"
-  add_foreign_key "recipes", "sources"
+  add_foreign_key "meals_sections", "meals"
+  add_foreign_key "meals_sections", "sections"
+  add_foreign_key "recipes", "creators"
+  add_foreign_key "sections", "instances"
   add_foreign_key "segments", "plans"
+  add_foreign_key "sources", "creators"
 end

@@ -9,7 +9,7 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 MEALS = %w[breakfast lunch dinner dessert snack].freeze
-SOURCES = %w[makayla_thomas_fit jasonalexander.fit].freeze
+CREATORS = %w[makayla_thomas_fit jasonalexander.fit].freeze
 
 DINNER_RECIPES = ["parmesan crusted chicken", 'creamy marinara
 chicken bowl', "rasta pasta bowls", 'lemon shrimp
@@ -22,21 +22,21 @@ MEALS.each do |meal|
   Meal.create! name: meal
 end
 
-SOURCES.each do |source|
-  Source.create! username: source
+CREATORS.each do |creator|
+  Creator.create! username: creator
 end
 
-source = Source.first
+creator = Creator.first
 
 DINNER_RECIPES.each do |recipe|
-  Recipe.create! name: recipe, source_id: source.id
+  Recipe.create! name: recipe, creator_id: creator.id
 end
 
-Recipe.create! name: "Brisket Breakfast Taco", source_id: 2
+Recipe.create! name: "Brisket Breakfast Taco", creator_id: 2
 
 Recipe.last.meals << Meal.first
 
 meal = Meal.find(3)
-Recipe.where(source_id: 1).each do |recipe|
+Recipe.where(creator_id: 1).each do |recipe|
   recipe.meals << meal
 end

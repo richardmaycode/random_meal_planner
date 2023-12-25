@@ -1,11 +1,11 @@
 class CreateSources < ActiveRecord::Migration[7.0]
   def change
     create_table :sources do |t|
-      t.string :username, limit: 75
-      t.string :url
+      t.string :name, limit: 75
+
+      t.belongs_to :creator, null: false, foreign_key: true
 
       t.timestamps
     end
-    add_index :sources, :username, unique: true
   end
 end
